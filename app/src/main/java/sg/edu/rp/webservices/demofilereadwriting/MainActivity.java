@@ -34,13 +34,10 @@ public class MainActivity extends AppCompatActivity {
         btnRead = findViewById(R.id.btnRead);
 
         //Folder creation
-        checkPermission();
-        String folderLocation =
-                Environment.getExternalStorageDirectory()
-                        .getAbsolutePath() + "/Folder";
-        File folder = new File(folderLocation);
-        if (folder.exists() == false){
-            boolean result = folder.mkdir();
+        String folderLocation_I = getFilesDir().getAbsolutePath() + "/Folder";
+        File folder_I = new File(folderLocation_I);
+        if (folder_I.exists() == false){
+            boolean result = folder_I.mkdir();
             if (result == true){
                 Log.d("File Read/Write", "Folder created");
             }
@@ -52,12 +49,12 @@ public class MainActivity extends AppCompatActivity {
                 //Code for file writing
                 checkPermission();
                 try {
-                    String folderLocation = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Folder";
-                    File targetFile = new File(folderLocation, "data.txt");
-                    FileWriter writer = new FileWriter(targetFile, true);
-                    writer.write("Hello world"+"\n");
-                    writer.flush();
-                    writer.close();
+                    String folderLocation_I = getFilesDir().getAbsolutePath() + "/Folder";
+                    File targetFile_I = new File(folderLocation_I, "data.txt");
+                            FileWriter writer_I = new FileWriter(targetFile_I, true);
+                    writer_I.write("test data" + "\n");
+                            writer_I.flush();
+                    writer_I.close();
                 } catch (Exception e) {
                     Toast.makeText(MainActivity.this, "Failed to write!", Toast.LENGTH_LONG).show();
                     e.printStackTrace();
@@ -70,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //Code for file reading
                 checkPermission();
-                String folderLocation = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Folder";
+                String folderLocation_I = getFilesDir().getAbsolutePath() + "/Folder";
                 File targetFile = new File(folderLocation, "data.txt");
                 if (targetFile.exists() == true){
                     String data ="";
