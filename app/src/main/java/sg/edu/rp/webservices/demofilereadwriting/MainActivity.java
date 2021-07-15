@@ -1,7 +1,11 @@
 package sg.edu.rp.webservices.demofilereadwriting;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.PermissionChecker;
 
+import android.Manifest;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -30,8 +34,10 @@ public class MainActivity extends AppCompatActivity {
         btnRead = findViewById(R.id.btnRead);
 
         //Folder creation
-        folderLocation = getFilesDir().getAbsolutePath() + "/MyFolder";
-
+        checkPermission();
+        String folderLocation =
+                Environment.getExternalStorageDirectory()
+                        .getAbsolutePath() + "/Folder";
         File folder = new File(folderLocation);
         if (folder.exists() == false){
             boolean result = folder.mkdir();
@@ -44,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //Code for file writing
+                checkPermission();
                 try {
                     String folderLocation = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Folder";
                     File targetFile = new File(folderLocation, "data.txt");
@@ -62,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //Code for file reading
+                checkPermission();
                 String folderLocation = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Folder";
                 File targetFile = new File(folderLocation, "data.txt");
                 if (targetFile.exists() == true){
@@ -84,6 +92,22 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+    private boolean checkPermission(){
+        int permissionCheck_Write = ContextCompat.checkSelfPermission(
+                MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        int permissionCheck_Read = ContextCompat.checkSelfPermission(
+                MainActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE);
+
+        if (permissionCheck_Write == PermissionChecker.PERMISSION_GRANTED || permissionCheck_Read == PermissionChecker.PERMISSION_GRANTED) {
+            return true;
+        } else {
+            ActivityCompat.requestPermissions(MainActivity.this,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
+            ActivityCompat.requestPermissions(MainActivity.this,
+                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+            return false;
+        }
     }
 }
 
